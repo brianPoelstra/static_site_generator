@@ -16,7 +16,7 @@ class HTMLNode:
         if self.props==None:
             return "no props"
         for item in self.props:
-            return_string+=f' {item}"{self.props[item]}"'
+            return_string+=f' {item}="{self.props[item]}"'
 
         return return_string
     
