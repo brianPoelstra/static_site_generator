@@ -3,7 +3,7 @@ from leafnode import LeafNode
 from parentnode import ParentNode
 from textnode import TextType
 from textnode import TextNode
-
+import re
 
 def text_node_to_html_node(text_node):
     
@@ -34,8 +34,8 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     for node in old_nodes:
         if node.text_type!=TextType.TEXT:
             new_nodes.append(node)
-        elif node.text.find(delimiter)==-1:
-            raise Exception(f"delimiter not found in node with text {node.text}")
+        elif node.text.find(delimiter)!=-1 and node.text.find(delimiter, node.text.find(delimiter)+1)==-1:
+            raise Exception("Invalid markdown syntax")
         else:
             new_nodes.extend(find_delimiter(node.text, delimiter, text_type))
 
@@ -51,7 +51,6 @@ def find_delimiter(text, delimiter, text_type):
 
     start=text.find(delimiter)
     end=text.find(delimiter, start+1)
-
     if start>0:
         nodes.append(TextNode(text[:start], TextType.TEXT))
     nodes.append(TextNode(text[start+len(delimiter):end], text_type))
@@ -66,3 +65,75 @@ def find_delimiter(text, delimiter, text_type):
 
 
 
+def extract_markdown_images(text):
+    matches_alt_text=re.findall("!\[(.*?)\]", text)
+    matches_url=re.findall("\((.*?)\)", text)
+    
+    return list(zip(matches_alt_text, matches_url))
+
+def extract_markdown_links(text):
+    matches_anchor_text=re.findall("\[(.*?)\]", text)
+    matches_url=re.findall("\((.*?)\)", text)
+
+    return list(zip(matches_anchor_text, matches_url))
+
+def split_nodes_image(old_nodes):
+    return_nodes=[]
+    for node in old_nodes:
+        text=node.text
+        print(text)
+        text_list=extract_markdown_images(text)
+
+        if node.text_type!=TextType.TEXT:
+            return_nodes.append(node)
+
+        elif len(text_list)==0:
+            return_nodes.append(node)
+
+        else:
+            for item in text_list:
+                start=text.find(item[0])
+                if start>2: #can start with ![item]
+                    return_nodes.append(TextNode(text[:start-2], TextType.TEXT))
+                return_nodes.append(TextNode(item[0], TextType.IMAGES, item[1]))
+                text=text[text.find(item[1])+len(item[1])+1:] #location of end of image in string+]
+                if len(text)>0:
+                    old_nodes.append(TextNode(text, TextType.TEXT))
+                 
+    return return_nodes
+
+
+def split_nodes_link(old_nodes):
+    return_nodes=[]
+    for node in old_nodes:
+        text=node.text
+        text_list=extract_markdown_links(text)
+
+        if node.text_type!=TextType.TEXT:
+            return_nodes.append(node) 
+
+        elif len(text_list)==0:
+            return_nodes.append(node)
+
+        else: 
+            for item in text_list:
+                start=text.find(item[0])
+                if start>1: #can start with [item]
+                    return_nodes.append(TextNode(text[:start-2], TextType.TEXT))
+                return_nodes.append(TextNode(item[0], TextType.LINKS, item[1]))
+
+                text=text[text.find(item[1])+len(item[1])+1:]
+                if len(text)>0:
+                    old_nodes.append(TextNode(text, TextType.TEXT))
+
+    return return_nodes
+
+def text_to_textnodes(text):
+    textnode = TextNode(text, TextType.TEXT)
+    nodes = split_nodes_delimiter([textnode], "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+    
+    return nodes
