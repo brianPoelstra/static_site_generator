@@ -17,7 +17,7 @@ class TestUtility(unittest.TestCase):
         #print(text_node_to_html_node(text_node1).to_html())
         #print(text_node_to_html_node(text_node2).to_html())
         #print(text_node_to_html_node(text_node3).to_html())
-        test_text_to_textnodes()         
+        test_block_to_block_type()      
 
 def test_extract():
     list=extract_markdown_images("this is text with a ![rick roll](https://i.imgur.com) and ![obi wan](https://stuff)")
@@ -42,6 +42,24 @@ def test_text_to_textnodes():
     list=text_to_textnodes("This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
     for item in list:
         print(item)
+
+def test_markdown_to_blocks():
+    string="# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+    for string in markdown_to_blocks(string):
+        print("#item")
+        print(string)
+    
+def test_block_to_block_type():
+    print(block_to_block_type("## this is a header"))
+    print(block_to_block_type("```this is code```"))
+    print(block_to_block_type(">quote 1\n>quote 2"))
+    print(block_to_block_type("* unordered list\n- unordered list"))
+    print(block_to_block_type("1. \n2. \n3. "))
+    print(block_to_block_type("this is normal text"))
+
+
+
+
 
 
 if __name__=="__main__":

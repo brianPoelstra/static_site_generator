@@ -137,3 +137,27 @@ def text_to_textnodes(text):
     nodes = split_nodes_link(nodes)
     
     return nodes
+
+def markdown_to_blocks(markdown):
+    strings = markdown.split("\n\n")
+    for string in strings:
+        string.strip()
+
+    return strings
+
+def block_to_block_type(markdown):
+    lines = markdown.split("\n")
+    if len(lines)==1 and markdown[0:3] == "```" and markdown[-3:] == "```":
+        return "code"
+    elif len(lines)==1 and markdown[0] == "#" and markdown.lstrip("#")[0]== " ":
+        return "heading"
+    elif len(list(filter(lambda line: line[0]==">", lines)))==len(lines):
+        return "quotes"
+    elif len(list(filter(lambda line: line[0]=="*" or line[0]=="-", lines)))==len(lines):
+        return "unordered list"
+    for i in range(0, len(lines)):
+        if lines[i].find(f"{i+1}.")!=0:
+            return "normal paragraph"
+    return "ordered list"
+    
+
