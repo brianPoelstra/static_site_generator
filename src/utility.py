@@ -150,14 +150,15 @@ def block_to_block_type(markdown):
     if len(lines)==1 and markdown[0:3] == "```" and markdown[-3:] == "```":
         return "code"
     elif len(lines)==1 and markdown[0] == "#" and markdown.lstrip("#")[0]== " ":
-        return "heading"
+        head_count=markdown.find(" ")
+        return f"h{head_count}"
     elif len(list(filter(lambda line: line[0]==">", lines)))==len(lines):
-        return "quotes"
+        return "blockquote"
     elif len(list(filter(lambda line: line[0]=="*" or line[0]=="-", lines)))==len(lines):
-        return "unordered list"
+        return "ul"
     for i in range(0, len(lines)):
         if lines[i].find(f"{i+1}.")!=0:
-            return "normal paragraph"
-    return "ordered list"
+            return "p"
+    return "ol"
     
 
