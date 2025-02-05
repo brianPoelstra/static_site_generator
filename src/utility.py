@@ -17,7 +17,7 @@ def text_node_to_html_node(text_node):
         return LeafNode("i", text_node.text)
 
     if text_node.text_type==TextType.CODE:
-        return LeafNode("cold", text_node.text)
+        return LeafNode("code", text_node.text)
 
     if text_node.text_type==TextType.LINKS:
         return LeafNode("link", "", {"href": text_node.url})
@@ -81,7 +81,6 @@ def split_nodes_image(old_nodes):
     return_nodes=[]
     for node in old_nodes:
         text=node.text
-        print(text)
         text_list=extract_markdown_images(text)
 
         if node.text_type!=TextType.TEXT:
@@ -147,6 +146,7 @@ def markdown_to_blocks(markdown):
 
 def block_to_block_type(markdown):
     lines = markdown.split("\n")
+
     if len(lines)==1 and markdown[0:3] == "```" and markdown[-3:] == "```":
         return "code"
     elif len(lines)==1 and markdown[0] == "#" and markdown.lstrip("#")[0]== " ":
@@ -161,7 +161,38 @@ def block_to_block_type(markdown):
             return "p"
     return "ol"
 
+def block_markdown_strip(markdown):
+    lines = markdown.split("\n")
+    
+    if len(lines)==1 and markdown[0:3] == "```" and markdown[-3:] == "```":
+        return markdown.strip("```")
+    elif len(lines)==1 and markdown[0] == "#" and markdown.lstrip("#")[0]== " ":
+        head_count=markdown.find(" ")
+        return markdown.lstrip("#".lstrip(" "))
+
+    elif len(list(filter(lambda line: line[0]==">", lines)))==len(lines):
+        for i in range(0, len(lines)):
+            lines[i]=lines[i].lstrip(">").rstrip("<")
+            return "\n".join(lines)
+    
+    return markdown
+
 
 def markdown_to_html_node(markdown):
     markdown_blocks=markdown_to_blocks(markdown)
+    converted_nodes=[]
     
+    for block in markdown_blocks:
+        converted_nodes.append(HTMLNode(block_to_block_type(block), text_to_children(block)))
+    
+    return HTMLNode("div", converted_nodes)
+
+def text_to_children(text):
+    text = block_markdown_strip(text)
+    nodes = text_to_textnodes(text)
+    convert_nodes=[]
+    
+    for node in nodes:
+        convert_nodes.append(text_node_to_html_node(node))
+
+    return convert_nodes

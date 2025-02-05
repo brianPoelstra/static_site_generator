@@ -4,6 +4,7 @@ from leafnode import LeafNode
 from textnode import TextNode
 from textnode import TextType
 
+
 class TestUtility(unittest.TestCase):
     def test_eq(self):
         text_node1=TextNode("hi", TextType.BOLD)
@@ -17,7 +18,7 @@ class TestUtility(unittest.TestCase):
         #print(text_node_to_html_node(text_node1).to_html())
         #print(text_node_to_html_node(text_node2).to_html())
         #print(text_node_to_html_node(text_node3).to_html())
-        test_block_to_block_type()      
+        test_markdown_to_html()  
 
 def test_extract():
     list=extract_markdown_images("this is text with a ![rick roll](https://i.imgur.com) and ![obi wan](https://stuff)")
@@ -58,8 +59,10 @@ def test_block_to_block_type():
     print(block_to_block_type("this is normal text"))
 
 
-
-
+def test_markdown_to_html():
+    file= open("/home/brian/projects/github.com/brianPoelstra/static_site_generator/src/markdown.txt", "r")
+    node=markdown_to_html_node(file.read().rstrip("\n"))
+    print(node)
 
 
 if __name__=="__main__":

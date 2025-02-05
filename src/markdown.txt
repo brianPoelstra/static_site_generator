@@ -1,0 +1,20 @@
+# this is header 1
+
+here is a paragraph of text
+
+- this is unordered list item 1
+- this is unordered list item 2
+
+[this is a link to](google.com)
+
+/[this is an image of gladiators](gladiator.com)
+
+*this is italic*
+
+**this is bold**
+
+```this is a code block```
+
+1. this is an ordered list
+2. item two
+3. item three
