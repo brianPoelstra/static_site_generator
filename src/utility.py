@@ -160,5 +160,8 @@ def block_to_block_type(markdown):
         if lines[i].find(f"{i+1}.")!=0:
             return "p"
     return "ol"
-    
 
+
+def markdown_to_html_node(markdown):
+    markdown_blocks=markdown_to_blocks(markdown)
+    
