@@ -20,10 +20,10 @@ def text_node_to_html_node(text_node):
         return LeafNode("code", text_node.text)
 
     if text_node.text_type==TextType.LINKS:
-        return LeafNode("link", "", {"href": text_node.url})
+        return LeafNode("link", "", {"href": text_node.url, "alt text": text_node.text})
 
     if text_node.text_type==TextType.IMAGES:
-        return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
+        return LeafNode("img", "", {"src": text_node.url, "alt text": text_node.text})
 
     raise Exception("invalid text type")
 
@@ -183,9 +183,9 @@ def markdown_to_html_node(markdown):
     converted_nodes=[]
     
     for block in markdown_blocks:
-        converted_nodes.append(HTMLNode(block_to_block_type(block), text_to_children(block)))
+        converted_nodes.append(ParentNode(block_to_block_type(block), text_to_children(block)))
     
-    return HTMLNode("div", converted_nodes)
+    return ParentNode("div", converted_nodes).to_html()
 
 def text_to_children(text):
     text = block_markdown_strip(text)

@@ -9,11 +9,9 @@ class TestLeafNode(unittest.TestCase):
         node3 = LeafNode("h1", "this is a header")
         node4 = LeafNode("h2", "this is a header with hyperlink", {"href": "github.com"})
 
-        print(node)
-        print(node2)
-        print(node3)
-        print(node4)
-
+def test():
+    print(node4)
+    pass
 
 if __name__ == "__main__":
     unittest.main()

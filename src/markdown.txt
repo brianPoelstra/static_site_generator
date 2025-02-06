@@ -5,7 +5,7 @@ here is a paragraph of text
 - this is unordered list item 1
 - this is unordered list item 2
 
-[this is a link to](google.com)
+[this is a link to google](google.com)
 
 /[this is an image of gladiators](gladiator.com)
 

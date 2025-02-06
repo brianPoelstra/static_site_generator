@@ -14,9 +14,8 @@ class HTMLNode:
     def props_to_html(self):
         return_string=""
         if self.props==None:
-            return "no props"
+            return ""
         for item in self.props:
-            print(type(self.props))
             return_string+=f' {item}="{self.props[item]}"'
 
         return return_string

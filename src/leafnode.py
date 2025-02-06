@@ -9,10 +9,11 @@ class LeafNode(HTMLNode):
         if self.value==None:
             raise ValueError("all leaf nodes require a value")
         if self.tag==None:
-            return str(value)
+            return str(self.value)
         elif self.tag=="code":
             return f'<pre><{self.tag} {self.props_to_html()}">{self.value}</{self.tag}><pre>'
-
-
-        return f'<{self.tag} {self.props_to_html()}">{self.value}</{self.tag}>'
+        if self.props==None:
+            return f'<{self.tag}>{self.value}</{self.tag}>'
+        
+        return f'<{self.tag} {self.props_to_html()}>{self.value}</{self.tag}>'
 

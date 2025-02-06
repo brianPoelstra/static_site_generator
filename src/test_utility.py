@@ -63,6 +63,7 @@ def test_markdown_to_html():
     file= open("/home/brian/projects/github.com/brianPoelstra/static_site_generator/src/markdown.txt", "r")
     node=markdown_to_html_node(file.read().rstrip("\n"))
     print(node)
+    file.close()
 
 
 if __name__=="__main__":
