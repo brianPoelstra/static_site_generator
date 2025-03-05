@@ -18,7 +18,7 @@ class TestUtility(unittest.TestCase):
         #print(text_node_to_html_node(text_node1).to_html())
         #print(text_node_to_html_node(text_node2).to_html())
         #print(text_node_to_html_node(text_node3).to_html())
-        test_markdown_to_html()  
+        test_extract_title()  
 
 def test_extract():
     list=extract_markdown_images("this is text with a ![rick roll](https://i.imgur.com) and ![obi wan](https://stuff)")
@@ -65,6 +65,9 @@ def test_markdown_to_html():
     print(node)
     file.close()
 
+def test_extract_title():
+    print(extract_title("# markdown"))
+    print(extract_title("## not markdown"))
 
 if __name__=="__main__":
     unittest.main()

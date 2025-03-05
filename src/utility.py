@@ -196,3 +196,26 @@ def text_to_children(text):
         convert_nodes.append(text_node_to_html_node(node))
 
     return convert_nodes
+
+def extract_title(markdown):
+    lines=markdown.split("\n")
+    print(lines[:2])
+    if lines[0][:2]=="# ":
+        return lines[0]
+    else:
+        raise Exception("no header found")
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    
+    with open(from_path) as file:
+        path_content=file.read()
+        file.close()
+    with open(from_template) as file:
+        template_content=file.read()
+        file.close()
+
+
+
+
+
